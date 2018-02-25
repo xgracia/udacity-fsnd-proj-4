@@ -26,6 +26,18 @@ function AppViewModel(){
     this.places_list = ko.observableArray(places);
 
     this.selected_place = ko.observable(null);
-}
+
+    this.search = ko.observable('');
+
+    this.search.subscribe(function(){
+        var query = new RegExp(self.search(), 'i');
+
+        var filtered_places = places.filter(function(place){
+            return place.name.search(query) >= 0;
+        });
+
+        self.places_list(filtered_places);
+    });
+ }
 
 ko.applyBindings(new AppViewModel());
