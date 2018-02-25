@@ -28,21 +28,23 @@ function AppViewModel(){
 
     this.places_list = ko.observableArray(places);
 
+    this.filtered_places = function(){
+        var query = new RegExp(self.search(), 'i');
+
+        return places.filter(function(place){
+            return place.name.search(query) >= 0;
+        });
+    };
+
     this.selected_place = ko.observable(null);
 
     this.search = ko.observable('');
 
     this.search.subscribe(function(){
-        var query = new RegExp(self.search(), 'i');
-
-        var filtered_places = places.filter(function(place){
-            return place.name.search(query) >= 0;
-        });
-
-        self.places_list(filtered_places);
+        self.places_list(self.filtered_places());
 
         // add Google Map Markers based on filtered list of places
-        addMarkers(filtered_places);
+        addMarkers(self.filtered_places());
     });
  }
 
