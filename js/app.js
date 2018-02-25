@@ -25,11 +25,7 @@ function AppViewModel(){
 
     this.places_list = ko.observableArray(places);
 
-    this.selected_place = ko.observable(places_list()[0]);
-
-    this.update_selected_place = function(){
-        self.selected_place(this);
-    };
+    this.selected_place = ko.observable(null);
 }
 
 ko.applyBindings(new AppViewModel());
