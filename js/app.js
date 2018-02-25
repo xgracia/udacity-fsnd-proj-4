@@ -42,10 +42,10 @@ function AppViewModel(){
 
     this.search.subscribe(function(){
         self.places_list(self.filtered_places());
-
-        // add Google Map Markers based on filtered list of places
-        addMarkers(self.filtered_places());
     });
+
+    // add Google Map Markers based on filtered list of places
+    this.search.subscribe(renderMarkers);
  }
 
 function initMap() {
@@ -58,7 +58,7 @@ function initMap() {
     app.search.notifySubscribers();
 }
 
-function addMarkers(filtered_places){
+function renderMarkers(){
     // do not do anything if the map has not been initialized
     if(!map){
         return;
@@ -71,6 +71,7 @@ function addMarkers(filtered_places){
     map_markers = [];
 
     // append markers for each filtered_place into map_markers
+    var filtered_places = app.filtered_places();
     filtered_places.forEach(function(place){
         var marker = new google.maps.Marker({
             position: {lat: place.lat, lng: place.lng},
