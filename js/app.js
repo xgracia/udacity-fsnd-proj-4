@@ -38,6 +38,9 @@ function AppViewModel(){
 
     this.selected_place = ko.observable(null);
 
+    // animate Google Map Marker upon selection
+    this.selected_place.subscribe(renderMarkers);
+
     this.search = ko.observable('');
 
     this.search.subscribe(function(){
@@ -73,10 +76,18 @@ function renderMarkers(){
     // append markers for each filtered_place into map_markers
     var filtered_places = app.filtered_places();
     filtered_places.forEach(function(place){
+        var animation = null;
+
+        // add animation if place is selected
+        if(place == app.selected_place()){
+            animation = google.maps.Animation.BOUNCE;
+        }
+
         var marker = new google.maps.Marker({
             position: {lat: place.lat, lng: place.lng},
             map: map,
-            title: place.name
+            title: place.name,
+            animation: animation
         });
 
         map_markers.push(marker);
