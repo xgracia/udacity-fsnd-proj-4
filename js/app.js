@@ -28,6 +28,11 @@ function AppViewModel(){
 
     this.places_list = ko.observableArray(places);
 
+    this.selected_place = ko.observable(null);
+
+    this.search = ko.observable('');
+
+    // returns filtered list of places based on search observable
     this.filtered_places = function(){
         var query = new RegExp(self.search(), 'i');
 
@@ -36,16 +41,13 @@ function AppViewModel(){
         });
     };
 
-    this.selected_place = ko.observable(null);
-
-    // animate Google Map Marker upon selection
-    this.selected_place.subscribe(renderMarkers);
-
-    this.search = ko.observable('');
-
+    // update places_list based on filtered list
     this.search.subscribe(function(){
         self.places_list(self.filtered_places());
     });
+
+    // animate Google Map Marker upon selection
+    this.selected_place.subscribe(renderMarkers);
 
     // add Google Map Markers based on filtered list of places
     this.search.subscribe(renderMarkers);
