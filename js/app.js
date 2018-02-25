@@ -42,8 +42,16 @@ function AppViewModel(){
     };
 
     // update places_list based on filtered list
+    // also clears selected place if not in filtered list
     this.search.subscribe(function(){
-        self.places_list(self.filtered_places());
+        var filtered_places = self.filtered_places();
+        var selected_place = self.selected_place();
+
+        self.places_list(filtered_places);
+
+        if(filtered_places.indexOf(selected_place) < 0){
+            self.selected_place(null);
+        }
     });
 
     // animate Google Map Marker upon selection
