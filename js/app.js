@@ -40,4 +40,11 @@ function AppViewModel(){
     });
  }
 
+function initMap() {
+    var map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 32.948333, lng: -96.729852},
+        zoom: 11
+    });
+}
+
 ko.applyBindings(new AppViewModel());
