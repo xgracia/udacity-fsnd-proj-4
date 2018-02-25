@@ -1,3 +1,6 @@
+var app = null;
+var map = null;
+var map_markers = [];
 var places = [{
     name: 'Taco Ocho',
     lat: 32.974799,
@@ -37,14 +40,45 @@ function AppViewModel(){
         });
 
         self.places_list(filtered_places);
+
+        // add Google Map Markers based on filtered list of places
+        addMarkers(filtered_places);
     });
  }
 
 function initMap() {
-    var map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 32.948333, lng: -96.729852},
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 33.002564,lng: -96.708245},
         zoom: 11
+    });
+
+    // notify search subscribers to render map markers
+    app.search.notifySubscribers();
+}
+
+function addMarkers(filtered_places){
+    // do not do anything if the map has not been initialized
+    if(!map){
+        return;
+    }
+
+    // clear all existing map markers
+    map_markers.forEach(function(marker){
+        marker.setMap(null);
+    });
+    map_markers = [];
+
+    // append markers for each filtered_place into map_markers
+    filtered_places.forEach(function(place){
+        var marker = new google.maps.Marker({
+            position: {lat: place.lat, lng: place.lng},
+            map: map,
+            title: place.name
+        });
+
+        map_markers.push(marker);
     });
 }
 
-ko.applyBindings(new AppViewModel());
+app = new AppViewModel();
+ko.applyBindings(app);
