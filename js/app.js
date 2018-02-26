@@ -106,7 +106,7 @@ function renderMarkers(){
 
             var html = '<h5>' + place.name + '</h5>';
             // if yelp data hasn't loaded yet, link the yelp page
-            if(place.yelp_data == null){
+            if(place.yelp_data === null){
                 html += '<p>Still retrieving Yelp Data. Please try again soon or visit: ' +
                     '<a href="https://www.yelp.com/biz/' + place.yelp_id + '">Its Yelp Page</a>' +
                     '</p>';
@@ -144,7 +144,7 @@ function renderMarkers(){
         map_markers.push(marker);
 
         // display the info window if it's defined
-        if(info_window != null){
+        if(info_window !== null){
             info_window.open(map, marker);
 
             // deselect the place when closing the info window
