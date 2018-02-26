@@ -3,22 +3,32 @@ var map = null;
 var map_markers = [];
 var places = [{
     name: 'Taco Ocho',
+    yelp_id: 'taco-ocho-richardson',
+    yelp_data: null,
     lat: 32.974799,
     lng: -96.709017
 },{
     name: 'Olive Burger',
+    yelp_id: 'olive-burger-richardson-richardson',
+    yelp_data: null,
     lat: 32.960417,
     lng: -96.734356
 },{
     name: 'Ye Ole Butcher Shop',
+    yelp_id: 'ye-ole-butcher-shop-plano',
+    yelp_data: null,
     lat: 33.020294,
     lng: -96.704346
 },{
     name: 'El Pueblito',
+    yelp_id: 'el-pueblito-mexican-cocina-plano',
+    yelp_data: null,
     lat: 33.056949,
     lng: -96.710714
 },{
     name: "Del's Charcoal Burgers",
+    yelp_id: 'dels-charcoal-burgers-richardson',
+    yelp_data: null,
     lat: 32.948137,
     lng: -96.731356
 }];
@@ -95,6 +105,24 @@ function renderMarkers(){
             animation = google.maps.Animation.BOUNCE;
 
             var html = '<h5>' + place.name + '</h5>';
+            // if yelp data hasn't loaded yet, link the yelp page
+            if(place.yelp_data == null){
+                html += '<p>Still retrieving Yelp Data. Please try again soon or visit: ' +
+                    '<a href="https://www.yelp.com/biz/' + place.yelp_id + '">Its Yelp Page</a>' +
+                    '</p>';
+            }
+            // if something went wrong w/ the yelp request, link to the yelp page
+            else if(place.yelp_data.error){
+                html += '<p>Error retrieving Yelp Data. Please visit: ' +
+                    '<a href="https://www.yelp.com/biz/' + place.yelp_id + '">Its Yelp Page</a>' +
+                    '</p>';
+            }
+            // if all went right, show rating and review counts
+            else{
+                html += '<p>Rating: ' + place.yelp_data.rating + '</p>' +
+                    '<p>Reviews: ' + place.yelp_data.review_count + '</p>' +
+                    '<p><a href="https://www.yelp.com/biz/' + place.yelp_id + '">Its Yelp Page</a></p>';
+            }
 
             info_window = new google.maps.InfoWindow({
                 content: html
@@ -128,5 +156,21 @@ function renderMarkers(){
     });
 }
 
+// function gets Yelp data for all places
+function getYelpData(){
+    places.forEach(function(place){
+        $.getJSON('/yelp_data/' + place.yelp_id, function(data){
+            place.yelp_data = data;
+        }).fail(function(){
+            place.yelp_data = {error: true};
+        });
+    });
+}
+
 app = new AppViewModel();
 ko.applyBindings(app);
+
+// only run when DOM is ready
+$(function(){
+    getYelpData();
+});
