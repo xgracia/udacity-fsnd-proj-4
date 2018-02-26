@@ -108,6 +108,11 @@ function renderMarkers(){
             animation: animation
         });
 
+        // Update selected_place when a marker is clicked
+        marker.addListener('click', function(){
+            app.selected_place(place);
+        });
+
         map_markers.push(marker);
 
         // display the info window if it's defined
