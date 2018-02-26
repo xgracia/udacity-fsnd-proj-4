@@ -87,10 +87,18 @@ function renderMarkers(){
     var filtered_places = app.filtered_places();
     filtered_places.forEach(function(place){
         var animation = null;
+        var info_window = null;
 
         // add animation if place is selected
+        // also builds an info window to be displayed
         if(place == app.selected_place()){
             animation = google.maps.Animation.BOUNCE;
+
+            var html = '<h5>' + place.name + '</h5>';
+
+            info_window = new google.maps.InfoWindow({
+                content: html
+            });
         }
 
         var marker = new google.maps.Marker({
@@ -101,6 +109,11 @@ function renderMarkers(){
         });
 
         map_markers.push(marker);
+
+        // display the info window if it's defined
+        if(info_window != null){
+            info_window.open(map, marker);
+        }
     });
 }
 
