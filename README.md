@@ -10,9 +10,9 @@ This project can be found here: http://udacity-fsnd-proj4.my.to/
 
 1. Clone git repo `git clone https://github.com/xgracia/udacity-fsnd-proj-4.git`
 2. Build Docker Image `docker build -t udacity-fsnd-proj-4 udacity-fsnd-proj-4/`
-3. Run Docker Image `docker run -p 8000:80 udacity-fsnd-proj-4`
-    * Note the "8000" can be changed to any locally available port
-4. Visit http://localhost:8000/
+3. Run Docker Image `docker run -p 8081:80 udacity-fsnd-proj-4`
+    * Note the "8081" can be changed to any locally available port
+4. Visit http://localhost:8081/
     * Make sure the port here matches the port in step 3
 
 ## References
