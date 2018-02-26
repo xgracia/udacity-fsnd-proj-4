@@ -118,6 +118,12 @@ function renderMarkers(){
         // display the info window if it's defined
         if(info_window != null){
             info_window.open(map, marker);
+
+            // deselect the place when closing the info window
+            info_window.addListener('closeclick', function(){
+                info_window.marker = null;
+                app.selected_place(null);
+            });
         }
     });
 }
