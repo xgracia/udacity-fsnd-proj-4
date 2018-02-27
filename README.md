@@ -6,6 +6,11 @@ This project is a single page application featuring a map of my favorite places 
 
 This project can be found on github pages: https://xgracia.github.io/udacity-fsnd-proj-4/
 
+## How do I get this running?
+
+1. Clone the git repo `git clone https://github.com/xgracia/udacity-fsnd-proj-4.git`
+2. Open index.html found here: `udacity-fsnd-proj-4/index.html`
+
 ## References
 
 - [Udacity](https://classroom.udacity.com/nanodegrees/nd004) - Lots of info here to get me started working with Google Maps API and Knockout JS
