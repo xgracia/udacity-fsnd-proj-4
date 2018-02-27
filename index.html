@@ -16,8 +16,8 @@
         <div class="row">
             <div class="col-sm-4">
                 <input type="text" class="form-control" placeholder="Search" data-bind="textInput: search">
-                <nav class="nav flex-column" data-bind="foreach: places_list">
-                    <a href="#" class="nav-link" data-bind="text: name, click: $parent.selected_place, css: {'active': $parent.selected_place() == $data}"></a>
+                <nav class="nav flex-column" data-bind="foreach: placesList">
+                    <a href="#" class="nav-link" data-bind="text: name, click: $parent.selectedPlace, css: {'active': $parent.selectedPlace() == $data}"></a>
                 </nav>
             </div>
             <div class="col-sm-8">
