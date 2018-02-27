@@ -72,13 +72,27 @@ function AppViewModel(){
  }
 
 function initMap() {
+    // initialize map
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 33.002564,lng: -96.708245},
         zoom: 11
     });
 
-    // notify search subscribers to render map markers
-    app.search.notifySubscribers();
+    // initialize all markers
+    places.forEach(function(place){
+        var marker = new google.maps.Marker({
+            position: {lat: place.lat, lng: place.lng},
+            map: map,
+            title: place.name
+        });
+
+        // Update selectedPlace when a marker is clicked
+        marker.addListener('click', function(){
+            app.selectedPlace(place);
+        });
+
+        mapMarkers.push(marker);
+    });
 }
 
 function mapFailure() {
