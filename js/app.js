@@ -1,6 +1,7 @@
 var app = null;
 var map = null;
 var mapMarkers = [];
+var infoWindow = null;
 var places = [{
     name: 'Taco Ocho',
     yelpId: 'taco-ocho-richardson',
@@ -65,7 +66,7 @@ function AppViewModel(){
     });
 
     // animate Google Map Marker upon selection
-    this.selectedPlace.subscribe(renderMarkers);
+    this.selectedPlace.subscribe(selectMarker);
 
     // add Google Map Markers based on filtered list of places
     this.search.subscribe(renderMarkers);
@@ -100,6 +101,66 @@ function mapFailure() {
     var html = '<div class="alert alert-danger">Error loading Google Maps API</div>' + elem.innerHTML;
 
     elem.innerHTML = html;
+}
+
+function selectMarker(){
+    // do not do anything if the map has not been initialized
+    if(!map){
+        return;
+    }
+
+    // close the current infoWindow if defined
+    if(infoWindow){
+        infoWindow.close();
+    }
+
+    mapMarkers.forEach(function(marker){
+        // if selectedPlace is defined and it matches the marker..
+        if(app.selectedPlace() && marker.title === app.selectedPlace().name){
+            // set animation to BOUNCE
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+
+            // also builds an info window to be displayed
+            var place = app.selectedPlace();
+            var html = '<h5>' + place.name + '</h5>';
+
+            // if yelp data hasn't loaded yet, link the yelp page
+            if(place.yelpData === null){
+                html += '<p>Still retrieving Yelp Data. Please try again soon or visit: ' +
+                    '<a href="https://www.yelp.com/biz/' + place.yelpId + '">Its Yelp Page</a>' +
+                    '</p>';
+            }
+            // if something went wrong w/ the yelp request, link to the yelp page
+            else if(place.yelpData.error){
+                html += '<p>Error retrieving Yelp Data. Please visit: ' +
+                    '<a href="https://www.yelp.com/biz/' + place.yelpId + '">Its Yelp Page</a>' +
+                    '</p>';
+            }
+            // if all went right, show rating and review counts
+            else{
+                html += '<p>Rating: ' + place.yelpData.rating + '</p>' +
+                    '<p>Reviews: ' + place.yelpData.review_count + '</p>' +
+                    '<p><a href="https://www.yelp.com/biz/' + place.yelpId + '">Its Yelp Page</a></p>';
+            }
+
+            // build the infoWindow
+            infoWindow = new google.maps.InfoWindow({
+                content: html
+            });
+
+            // display the info window if it's defined
+            infoWindow.open(map, marker);
+
+            // deselect the place when closing the info window
+            infoWindow.addListener('closeclick', function(){
+                app.selectedPlace(null);
+            });
+        }
+        else {
+            // otherwise clear animation
+            marker.setAnimation(null);
+        }
+    });
 }
 
 function renderMarkers(){
