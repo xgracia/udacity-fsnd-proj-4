@@ -159,7 +159,7 @@ function renderMarkers(){
 // function gets Yelp data for all places
 function getYelpData(){
     places.forEach(function(place){
-        $.getJSON('https://udacity-fsnd-proj4.my.to/yelpData/' + place.yelpId, function(data){
+        $.getJSON('https://udacity-fsnd-proj4.my.to/yelp_data/' + place.yelpId, function(data){
             place.yelpData = data;
         }).fail(function(){
             place.yelpData = {error: true};
