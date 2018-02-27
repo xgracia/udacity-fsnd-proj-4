@@ -81,6 +81,13 @@ function initMap() {
     app.search.notifySubscribers();
 }
 
+function mapFailure() {
+    var elem = document.getElementById('map');
+    var html = '<div class="alert alert-danger">Error loading Google Maps API</div>' + elem.innerHTML;
+
+    elem.innerHTML = html;
+}
+
 function renderMarkers(){
     // do not do anything if the map has not been initialized
     if(!map){
