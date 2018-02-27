@@ -1,4 +1,4 @@
-from bottle import route, run, static_file, abort
+from bottle import route, run, static_file, abort, response
 import json
 import requests
 
@@ -20,6 +20,8 @@ def yelp_data(yelp_id):
 	configs = json.load(open('yelp_configs.json'))
 	headers = {'Authorization': 'Bearer ' + configs.get('api_key')}
 	url = configs.get('base_url') + yelp_id
+	# add CORS header
+	response.headers['Access-Control-Allow-Origin'] = '*'
 	# make yelp request
 	r = requests.get(url, headers=headers)
 	if(r.ok):
