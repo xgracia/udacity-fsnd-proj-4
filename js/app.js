@@ -69,7 +69,7 @@ function AppViewModel(){
     this.selectedPlace.subscribe(selectMarker);
 
     // add Google Map Markers based on filtered list of places
-    this.search.subscribe(renderMarkers);
+    this.search.subscribe(filterMarkers);
  }
 
 function initMap() {
@@ -159,6 +159,29 @@ function selectMarker(){
         else {
             // otherwise clear animation
             marker.setAnimation(null);
+        }
+    });
+}
+
+function filterMarkers(){
+    // do not do anything if the map has not been initialized
+    if(!map){
+        return;
+    }
+
+    // get names for filtered places
+    var filteredPlaces = [];
+    app.filteredPlaces().forEach(function(place){
+        filteredPlaces.push(place.name);
+    });
+
+    mapMarkers.forEach(function(marker){
+        // hide marker if not in filteredPlaces
+        if(filteredPlaces.indexOf(marker.title) < 0){
+            marker.setVisible(false);
+        }
+        else {
+            marker.setVisible(true);
         }
     });
 }
